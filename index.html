@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>행사장 지도</title>
+  <style>
+    body { margin:0; font-family: 'Arial', sans-serif; }
+    .map-container { position: relative; display: inline-block; }
+    .map-container img { width: 100%; }
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+    }
+    .modal, .popup { position: fixed; inset:0; background: rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; visibility: hidden; }
+    .modal.active, .popup.active { visibility: visible; }
+    .modal-content, .popup-content { background:#fff; padding:18px; border-radius:12px; max-width:720px; width:92%; max-height:86vh; overflow:auto; box-shadow:0 8px 30px rgba(2,6,23,0.25); text-align:center; position: relative;}
+    .modal-content img { width:100%; border-radius:8px; margin-bottom:8px; cursor:pointer; }
+    .close { background:#1976d2; color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; position:absolute; bottom:20px; right:20px; }
+    h3 { margin:8px 0; }
+  </style>
+</head>
+<body>
+
+<div class="map-container" id="mapContainer">
+  <img src="map.png" alt="행사장 지도">
+
+  <!-- 콩이관 -->
+  <div class="hotspot" style="top:220px; left:524px; width:67px; height:49px;" onclick="showModal('콩이관')"></div>
+
+  <!-- 홍메관 -->
+  <div class="hotspot" style="top:452px; left:708px; width:60px; height:103px;" onclick="showModal('홍메관')"></div>
+
+  <!-- 다년생 식물원 -->
+  <div class="hotspot" style="top:312px; left:510px; width:49px; height:62px;" onclick="showModal('다년생 식물원')"></div>
+
+  <!-- 효모관 -->
+  <div class="hotspot" style="top:393px; left:639px; width:45px; height:86px;" onclick="showModal('효모관')"></div>
+
+  <!-- 콩이공원 -->
+  <div class="hotspot" style="top:498px; left:1224px; width:70px; height:70px;" onclick="showModal('콩이공원')"></div>
+
+  <!-- 팡이공원 -->
+  <div class="hotspot" style="top:486px; left:1017px; width:60px; height:60px;" onclick="showModal('팡이공원')"></div>
+
+  <!-- 팡이관 -->
+  <div class="hotspot" style="top:491px; left:637px; width:42px; height:73px;" onclick="showModal('팡이관')"></div>
+</div>
+
+<div class="popup active" id="popup">
+  <div class="popup-content">
+    <h3>BF 인증 안내</h3>
+    <p>장애인, 노약자, 임산부 등 사회적 약자가 시설을 안전하고 편하게 이용할 수 있도록 보장하는 인증 제도입니다.</p>
+    <button class="close" onclick="closePopup()">닫기</button>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3 id="modal-title"></h3>
+    <img id="modal-photo" src="" alt="사진">
+    <p id="modal-desc"></p>
+    <button class="close" onclick="closeModal()">닫기</button>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalPhoto = document.getElementById('modal-photo');
+  const modalDesc = document.getElementById('modal-desc');
+
+  let currentGallery = [];
+  let currentDesc = [];
+  let currentIndex = 0;
+
+  function showModal(areaName) {
+    const galleries = {
+      "콩이관": ["콩이관1.jpg","콩이관2.jpg","콩이관3.jpg","콩이관4.jpg"],
+      "홍메관": ["홍메관1.jpg","홍메관2.jpg","홍메관3.jpg"],
+      "다년생 식물원": ["다년생식물원1.jpg","다년생식물원2.jpg","다년생식물원3.jpg"],
+      "효모관": ["효모관1.jpg","효모관2.jpg","효모관3.jpg"],
+      "콩이공원": ["콩이공원1.jpg"],
+      "팡이공원": ["팡이공원1.jpg","팡이공원2.jpg"],
+      "팡이관": ["팡이관1.jpg"]
+    };
+    const descs = {
+      "콩이관": ["콩이관 입구: 장애인 전용 길 배치","실내에 장애인 전용 화장실 배치","실내에 장애인 전용 엘리베이터 배치","실내 내부 모습: 지체 장애인을 위한 휠체어가 구비되어 있으며 지체 장애인 모두 시설 이용가능"],
+      "홍메관": ["(위 건물이 테라포밍관) 테라포밍관은 놀이기구 이용이 어려울 수 있음","출입구 휠체어로 이용 가능","출입구 입장 후 좌측에 장애인 전용 화장실"],
+      "다년생 식물원": ["수목원 내부에 엘리베이터가 설치되어 있어 휠체어로 통행이 편하다","수목원 내부 1층 왼쪽에 장애인 화장실이 마련되어 있다","수목원 내부에 1층 왼쪽에 장애인 화장실이 마련되어 있다"],
+      "효모관": ["고정문 옆 점자 안내도","입장 후 왼쪽 엘리베이터 설치","고정문 후 자동문 있음"],
+      "콩이공원": ["공원 안쪽 길이 포장되어 있지 않아서 비가 오면 땅이 질퍽해져 이동하기 불편함"],
+      "팡이공원": ["길이 좁고 울퉁불퉁해서 휠체어를 타고 올라가기 어려움","펜스가 없는 부분이 있어 위험함"],
+      "팡이관": ["1번 출입구 입장 후 오른쪽에 엘리베이터"]
+    };
+
+    currentGallery = galleries[areaName];
+    currentDesc = descs[areaName];
+    currentIndex = 0;
+
+    modalTitle.textContent = areaName;
+    modalPhoto.src = currentGallery[currentIndex];
+    modalDesc.textContent = currentDesc[currentIndex];
+    modal.classList.add('active');
+  }
+
+  modalPhoto.addEventListener('click', () => {
+    if(currentIndex < currentGallery.length - 1){
+      currentIndex++;
+      modalPhoto.src = currentGallery[currentIndex];
+      modalDesc.textContent = currentDesc[currentIndex];
+    }
+  });
+
+  function closeModal() { modal.classList.remove('active'); }
+  function closePopup() { document.getElementById('popup').classList.remove('active'); }
+</script>
+
+</body>
+</html>
