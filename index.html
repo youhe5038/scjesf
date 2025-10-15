@@ -1,19 +1,9 @@
 <!DOCTYPE html>
 <!-- saved from url=(0031)https://scfestival.netlify.app/ -->
-<html lang="ko">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="screen-orientation" content="landscape">
-  <meta name="5x-orientation" content="landscape">
   <title>행사장 지도</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: https://github.com/youhe5038/scjesf/blob/main/map.png?raw=true('map.png') center center / contain no-repeat;
-    }
-  </style>
   <style>
     body { margin:0; font-family: 'Arial', sans-serif; }
     .map-container { position: relative; display: inline-block; }
@@ -33,27 +23,28 @@
 <body>
 
 <div class="map-container" id="mapContainer">
+  <img src="./index_files/map.png" alt="행사장 지도">
 
   <!-- 콩이관 -->
-  <div class="hotspot" style="top:220px; left:524px; width:67px; height:49px;" onclick="showModal(&#39;콩이관&#39;)"></div>
+  <div class="hotspot" style="top:220px; left:649px; width:68px; height:274px;" onclick="showModal(&#39;콩이관&#39;)"></div>
 
   <!-- 홍메관 -->
-  <div class="hotspot" style="top:452px; left:708px; width:60px; height:103px;" onclick="showModal(&#39;홍메관&#39;)"></div>
+  <div class="hotspot" style="top:566px; left:899px; width:60px; height:103px;" onclick="showModal(&#39;홍메관&#39;)"></div>
 
   <!-- 다년생 식물원 -->
-  <div class="hotspot" style="top:312px; left:510px; width:49px; height:62px;" onclick="showModal(&#39;다년생 식물원&#39;)"></div>
+  <div class="hotspot" style="top:391px; left:641px; width:49px; height:62px;" onclick="showModal(&#39;다년생 식물원&#39;)"></div>
 
   <!-- 효모관 -->
-  <div class="hotspot" style="top:393px; left:639px; width:45px; height:86px;" onclick="showModal(&#39;효모관&#39;)"></div>
+  <div class="hotspot" style="top:494px; left:806px; width:45px; height:86px;" onclick="showModal(&#39;효모관&#39;)"></div>
 
   <!-- 콩이공원 -->
-  <div class="hotspot" style="top:498px; left:1224px; width:70px; height:70px;" onclick="showModal(&#39;콩이공원&#39;)"></div>
+  <div class="hotspot" style="top:616px; left:1528px; width:90px; height:90px;" onclick="showModal(&#39;콩이공원&#39;)"></div>
 
   <!-- 팡이공원 -->
-  <div class="hotspot" style="top:486px; left:1017px; width:60px; height:60px;" onclick="showModal(&#39;팡이공원&#39;)"></div>
+  <div class="hotspot" style="top:605px; left:1272px; width:60px; height:60px;" onclick="showModal(&#39;팡이공원&#39;)"></div>
 
   <!-- 팡이관 -->
-  <div class="hotspot" style="top:491px; left:637px; width:42px; height:73px;" onclick="showModal(&#39;팡이관&#39;)"></div>
+  <div class="hotspot" style="top:612px; left:804px; width:42px; height:73px;" onclick="showModal(&#39;팡이관&#39;)"></div>
 </div>
 
 <div class="popup" id="popup">
@@ -124,7 +115,6 @@
   function closeModal() { modal.classList.remove('active'); }
   function closePopup() { document.getElementById('popup').classList.remove('active'); }
 </script>
-
 
 
 </body></html>
