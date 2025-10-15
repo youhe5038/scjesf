@@ -1,52 +1,116 @@
 <!DOCTYPE html>
-<!-- saved from url=(0031)https://scfestival.netlify.app/ -->
-<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>행사장 지도</title>
-  <style>
-    body { margin:0; font-family: 'Arial', sans-serif; }
-    .map-container { position: relative; display: inline-block; }
-    .map-container img { width: 100%; }
-    .hotspot {
-      position: absolute;
-      cursor: pointer;
-    }
-    .modal, .popup { position: fixed; inset:0; background: rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; visibility: hidden; }
-    .modal.active, .popup.active { visibility: visible; }
-    .modal-content, .popup-content { background:#fff; padding:18px; border-radius:12px; max-width:720px; width:92%; max-height:86vh; overflow:auto; box-shadow:0 8px 30px rgba(2,6,23,0.25); text-align:center; position: relative;}
-    .modal-content img { width:100%; border-radius:8px; margin-bottom:8px; cursor:pointer; }
-    .close { background:#1976d2; color:#fff; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; position:absolute; bottom:20px; right:20px; }
-    h3 { margin:8px 0; }
-  </style>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>행사장 지도</title>
+<style>
+  body {
+    margin:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f0f0f0;
+  }
+
+  .map-container {
+    position:relative;
+    max-width:90vw;
+    max-height:80vh;
+    overflow:hidden;
+  }
+
+  .map-container img {
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:contain;
+  }
+
+  .hotspot { position:absolute; cursor:pointer; }
+
+  .modal, .popup {
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.3s;
+  }
+  .modal.active, .popup.active {
+    opacity:1;
+    pointer-events:all;
+  }
+
+  .modal-content, .popup-content {
+    background:#fff;
+    padding:18px;
+    border-radius:12px;
+    max-width:720px;
+    width:92%;
+    max-height:86vh;
+    overflow:auto;
+    box-shadow:0 8px 30px rgba(2,6,23,0.25);
+    text-align:center;
+    position:relative;
+  }
+
+  .modal-content img, .popup-content img {
+    width:100%;
+    border-radius:8px;
+    margin-bottom:8px;
+  }
+
+  .close {
+    background:#1976d2;
+    color:#fff;
+    border:0;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    position:absolute;
+    bottom:20px;
+    right:20px;
+  }
+
+  .nav-btn {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(25,118,210,0.8);
+    color:#fff;
+    border:0;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .prev-btn { left:10px; }
+  .next-btn { right:10px; }
+
+  h3 { margin:8px 0; }
+</style>
 </head>
+
 <body>
 
-<div class="map-container" id="mapContainer">
-  <img src="https://github.com/youhe5038/scjesf/blob/main/map.png?raw=true" alt="행사장 지도">
+<div class="map-container">
+  <img src="index_files/map.png" alt="행사장 지도">
 
-  <!-- 콩이관 -->
-  <div class="hotspot" style="top:220px; left:649px; width:68px; height:274px;" onclick="showModal(&#39;콩이관&#39;)"></div>
-
-  <!-- 홍메관 -->
-  <div class="hotspot" style="top:566px; left:899px; width:60px; height:103px;" onclick="showModal(&#39;홍메관&#39;)"></div>
-
-  <!-- 다년생 식물원 -->
-  <div class="hotspot" style="top:391px; left:641px; width:49px; height:62px;" onclick="showModal(&#39;다년생 식물원&#39;)"></div>
-
-  <!-- 효모관 -->
-  <div class="hotspot" style="top:494px; left:806px; width:45px; height:86px;" onclick="showModal(&#39;효모관&#39;)"></div>
-
-  <!-- 콩이공원 -->
-  <div class="hotspot" style="top:616px; left:1528px; width:90px; height:90px;" onclick="showModal(&#39;콩이공원&#39;)"></div>
-
-  <!-- 팡이공원 -->
-  <div class="hotspot" style="top:605px; left:1272px; width:60px; height:60px;" onclick="showModal(&#39;팡이공원&#39;)"></div>
-
-  <!-- 팡이관 -->
-  <div class="hotspot" style="top:612px; left:804px; width:42px; height:73px;" onclick="showModal(&#39;팡이관&#39;)"></div>
+  <!-- 클릭 영역 (px → % 변환) -->
+  <div class="hotspot" style="top:20.4%; left:33.8%; width:3.5%; height:25.5%;" onclick="showModal('콩이관')" aria-label="콩이관"></div>
+  <div class="hotspot" style="top:52.4%; left:46.8%; width:3.1%; height:9.5%;" onclick="showModal('홍메관')" aria-label="홍메관"></div>
+  <div class="hotspot" style="top:36.2%; left:33.4%; width:2.6%; height:5.7%;" onclick="showModal('다년생 식물원')" aria-label="다년생 식물원"></div>
+  <div class="hotspot" style="top:45.7%; left:41.9%; width:2.3%; height:8.0%;" onclick="showModal('효모관')" aria-label="효모관"></div>
+  <div class="hotspot" style="top:57.0%; left:79.6%; width:4.7%; height:8.3%;" onclick="showModal('콩이공원')" aria-label="콩이공원"></div>
+  <div class="hotspot" style="top:56.0%; left:66.3%; width:3.1%; height:5.6%;" onclick="showModal('팡이공원')" aria-label="팡이공원"></div>
+  <div class="hotspot" style="top:56.7%; left:41.9%; width:2.2%; height:6.8%;" onclick="showModal('팡이관')" aria-label="팡이관"></div>
 </div>
 
+<!-- BF 안내 팝업 -->
 <div class="popup" id="popup">
   <div class="popup-content">
     <h3>BF 인증 안내</h3>
@@ -55,66 +119,110 @@
   </div>
 </div>
 
+<!-- 시설 모달 -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <h3 id="modal-title">콩이공원</h3>
-    <img id="modal-photo" src="./index_files/콩이공원1.jpg" alt="사진">
-    <p id="modal-desc">공원 안쪽 길이 포장되어 있지 않아서 비가 오면 땅이 질퍽해져 이동하기 불편함</p>
+    <img id="modal-photo" src="index_files/콩이공원1.jpg" alt="사진">
+    <p id="modal-desc">공원 안쪽 길이 포장되어 있지 않아서 비가 오면 이동하기 불편합니다.</p>
     <button class="close" onclick="closeModal()">닫기</button>
+    <button class="nav-btn prev-btn" onclick="prevImage()">◀</button>
+    <button class="nav-btn next-btn" onclick="nextImage()">▶</button>
   </div>
 </div>
 
 <script>
-  const modal = document.getElementById('modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalPhoto = document.getElementById('modal-photo');
-  const modalDesc = document.getElementById('modal-desc');
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modal-title');
+const modalPhoto = document.getElementById('modal-photo');
+const modalDesc = document.getElementById('modal-desc');
+const popup = document.getElementById('popup');
 
-  let currentGallery = [];
-  let currentDesc = [];
-  let currentIndex = 0;
+let currentGallery = [];
+let currentDesc = [];
+let currentIndex = 0;
 
-  function showModal(areaName) {
-    const galleries = {
-      "콩이관": ["콩이관1.jpg","콩이관2.jpg","콩이관3.jpg","콩이관4.jpg"],
-      "홍메관": ["홍메관1.jpg","홍메관2.jpg","홍메관3.jpg"],
-      "다년생 식물원": ["다년생식물원1.jpg","다년생식물원2.jpg","다년생식물원3.jpg"],
-      "효모관": ["효모관1.jpg","효모관2.jpg","효모관3.jpg"],
-      "콩이공원": ["콩이공원1.jpg"],
-      "팡이공원": ["팡이공원1.jpg","팡이공원2.jpg"],
-      "팡이관": ["팡이관1.jpg"]
-    };
-    const descs = {
-      "콩이관": ["콩이관 입구: 장애인 전용 길 배치","실내에 장애인 전용 화장실 배치","실내에 장애인 전용 엘리베이터 배치","실내 내부 모습: 지체 장애인을 위한 휠체어가 구비되어 있으며 지체 장애인 모두 시설 이용가능"],
-      "홍메관": ["(위 건물이 테라포밍관) 테라포밍관은 놀이기구 이용이 어려울 수 있음","출입구 휠체어로 이용 가능","출입구 입장 후 좌측에 장애인 전용 화장실"],
-      "다년생 식물원": ["수목원 내부에 엘리베이터가 설치되어 있어 휠체어로 통행이 편하다","수목원 내부 1층 왼쪽에 장애인 화장실이 마련되어 있다","수목원 내부에 1층 왼쪽에 장애인 화장실이 마련되어 있다"],
-      "효모관": ["고정문 옆 점자 안내도","입장 후 왼쪽 엘리베이터 설치","고정문 후 자동문 있음"],
-      "콩이공원": ["공원 안쪽 길이 포장되어 있지 않아서 비가 오면 땅이 질퍽해져 이동하기 불편함"],
-      "팡이공원": ["길이 좁고 울퉁불퉁해서 휠체어를 타고 올라가기 어려움","펜스가 없는 부분이 있어 위험함"],
-      "팡이관": ["1번 출입구 입장 후 오른쪽에 엘리베이터"]
-    };
+const galleries = {
+  "콩이관": ["콩이관1.jpg","콩이관2.jpg","콩이관3.jpg","콩이관4.jpg"],
+  "홍메관": ["홍메관1.jpg","홍메관2.jpg","홍메관3.jpg"],
+  "다년생 식물원": ["다년생식물원1.jpg","다년생식물원2.jpg","다년생식물원3.jpg"],
+  "효모관": ["효모관1.jpg","효모관2.jpg","효모관3.jpg"],
+  "콩이공원": ["콩이공원1.jpg"],
+  "팡이공원": ["팡이공원1.jpg","팡이공원2.jpg","팡이공원3.jpg"],
+  "팡이관": ["팡이관1.jpg","팡이관2.jpg"]
+};
 
-    currentGallery = galleries[areaName];
-    currentDesc = descs[areaName];
-    currentIndex = 0;
+const descs = {
+  "콩이관": [
+    "콩이관 입구<br>장애인 전용 길이 배치되어 있습니다.",
+    "장애인 전용 화장실",
+    "장애인 전용 엘리베이터",
+    "실내 내부 모습<br>지체 장애인을 위한 휠체어가 구비되어 있으며 지체 장애인 모두 시설 이용이 가능합니다."
+  ],
+  "홍메관": [
+    "테라포밍관<br>놀이기구 이용이 어려울 수 있습니다.",
+    "출입구<br>휠체어로도 이용 가능합니다.",
+    "출입구 입장 후 좌측에 장애인 전용 화장실이 있습니다."
+  ],
+  "다년생 식물원": [
+    "수목원 내부에 엘리베이터가 있어 휠체어로 통행이 편합니다.",
+    "수목원 내부 1층 왼쪽에 장애인 화장실이 마련되어 있다.",
+    "수목원 내부 1층 왼쪽에 장애인 화장실이 마련되어 있다."
+  ],
+  "효모관": [
+    "고정문 옆 점자 안내도",
+    "입장 후 왼쪽 엘리베이터 설치, 고정문 후 자동문이 있습니다."
+  ],
+  "콩이공원": [
+    "공원 안쪽 길이 포장되어 있지 않아서 비가 오면 이동하기 불편합니다."
+  ],
+  "팡이공원": [
+    "공원 안쪽 길이 포장되어 있지 않아서 비가 오면 땅이 질퍽해져 이동하기 불편합니다.",
+    "길이 좁고 울퉁불퉁해서 휠체어를 타고 올라가기 어렵습니다.",
+    "펜스가 없는 부분이 있어 위험합니다."
+  ],
+  "팡이관": [
+    "1번 출입구 입장 후 오른쪽에 엘리베이터가 있습니다.",
+    "팡이관 출입구 왼쪽에 벤치가 있습니다."
+  ]
+};
 
-    modalTitle.textContent = areaName;
-    modalPhoto.src = currentGallery[currentIndex];
-    modalDesc.textContent = currentDesc[currentIndex];
-    modal.classList.add('active');
+function showModal(areaName){
+  currentGallery = galleries[areaName];
+  currentDesc = descs[areaName];
+  currentIndex = 0;
+
+  modalTitle.innerHTML = areaName;
+  modalPhoto.src = `index_files/${currentGallery[currentIndex]}`;
+  modalDesc.innerHTML = currentDesc[currentIndex];
+  modal.classList.add('active');
+}
+
+function closeModal(){ modal.classList.remove('active'); }
+function showPopup(){ popup.classList.add('active'); }
+function closePopup(){ popup.classList.remove('active'); }
+
+modalPhoto.addEventListener('click', nextImage);
+
+function nextImage(){
+  if(currentIndex < currentGallery.length - 1){
+    currentIndex++;
+    modalPhoto.src = `index_files/${currentGallery[currentIndex]}`;
+    modalDesc.innerHTML = currentDesc[currentIndex];
   }
+}
 
-  modalPhoto.addEventListener('click', () => {
-    if(currentIndex < currentGallery.length - 1){
-      currentIndex++;
-      modalPhoto.src = currentGallery[currentIndex];
-      modalDesc.textContent = currentDesc[currentIndex];
-    }
-  });
+function prevImage(){
+  if(currentIndex > 0){
+    currentIndex--;
+    modalPhoto.src = `index_files/${currentGallery[currentIndex]}`;
+    modalDesc.innerHTML = currentDesc[currentIndex];
+  }
+}
 
-  function closeModal() { modal.classList.remove('active'); }
-  function closePopup() { document.getElementById('popup').classList.remove('active'); }
+// 페이지 로드 시 BF 팝업 자동 표시
+window.addEventListener('load', showPopup);
 </script>
 
-
-</body></html>
+</body>
+</html>
